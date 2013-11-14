@@ -86,6 +86,21 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
   }
 
   /**
+   * process the form after the input has been submitted and validated
+   *
+   * @access public
+   *
+   * @return None
+   */
+  public function postProcess() {
+    // TODO: rewrite using contribution token and one letter by contribution
+    $this->setContactIDs();
+    $skipOnHold = isset($this->skipOnHold) ? $this->skipOnHold : FALSE;
+    $skipDeceased = isset($this->skipDeceased) ? $this->skipDeceased : TRUE;
+    CRM_Pdfletterevents_Form_Task_PDFLetterCommon::postProcess($this, $this->_participantIds, $skipOnHold, $skipDeceased, $this->_contactIds);
+  }
+
+  /**
    * list available tokens, at time of writing these were
    * {event.event_id} => Event ID'
    * {event.title} => Event Title
