@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <extension key="be.dizzymisslizzy.pdfletterevents" type="module">
   <file>pdfletterevents</file>
-  <name>FIXME</name>
-  <description>FIXME</description>
-  <license>FIXME</license>
+  <name>PDF Letters events</name>
+  <description>Make pdf letters for participants of events</description>
+  <license></license>
   <maintainer>
-    <author>FIXME</author>
-    <email>FIXME@example.com</email>
+    <author>Lies Lamoen</author>
+    <email>lieslamoen@gmail.com</email>
   </maintainer>
   <releaseDate>2013-11-14</releaseDate>
   <version>1.0</version>
