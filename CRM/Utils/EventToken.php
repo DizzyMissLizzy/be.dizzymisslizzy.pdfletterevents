@@ -36,7 +36,7 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
    * @param boolean $escapeSmarty
    * @return string string with replacements made
    */
-  public static function replaceEntityTokens($entity, $participantArray, $eventArray, $str, $knownTokens = array(), $escapeSmarty = FALSE) {
+  public static function replaceEntityEventTokens($entity, $participantArray, $eventArray, $str, $knownTokens = array(), $escapeSmarty = FALSE) {
 
     if (!$knownTokens || !CRM_Utils_Array::value($entity, $knownTokens)) {
       return $str;
@@ -87,8 +87,6 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
 
    switch ($token) {
      case 'event_id':
-     case 'start_date':
-     case 'end_date':
      case 'event_type':
        $value =  $participant[$token];
        break;
@@ -97,9 +95,11 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
        break;
      case 'summary':
      case 'description':
+     case 'start_date':
+     case 'end_date':
         $value = $event[$participant['event_id']][$token];
        break;
-     case 'location':
+     /*case 'location':
        try{
         $street = civicrm_api3('Address', 'getvalue', array('id' => $event[$participant['event_id']]['loc_block_id'], 'return' => 'street_address'));
         $postcode = civicrm_api3('Address', 'getvalue', array('id' => $event[$participant['event_id']]['loc_block_id'], 'return' => 'postal_code'));
@@ -112,7 +112,7 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
          // api handles NULL (4.4)
          $value = 0;
        }
-       break;
+       break;*/
      default:
        $value = "{$entity}.{$token}";
        break;
