@@ -1,5 +1,4 @@
-<?php
-/*
+{*
  +--------------------------------------------------------------------+
  | CiviCRM version 4.4                                                |
  +--------------------------------------------------------------------+
@@ -23,65 +22,12 @@
  | GNU Affero General Public License or the licensing of CiviCRM,     |
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
-*/
+*}
+<div class="crm-form-block crm-block crm-contact-task-pdf-form-block">
+<h3>{ts}Event Letter (PDF){/ts}</h3>
+  <div class="messages status no-popup">{include file="CRM/Event/Form/Task.tpl"}</div>
 
-/**
- *
- * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2013
- * $Id$
- *
- */
+{include file="CRM/Contact/Form/Task/PDFLetterCommon.tpl"}
 
-/**
- * This class provides the functionality to create PDF letter for a group of
- * contacts or a single contact.
- */
-class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
-
-  /**
-   * all the existing templates in the system
-   *
-   * @var array
-   */
-  public $_templates = NULL;
-
-  public $_single = NULL;
-
-  public $_cid = NULL;
-
-  /**
-   * build all the data structures needed to build the form
-   *
-   * @return void
-   * @access public
-   */
-  function preProcess() {
-    $this->skipOnHold = $this->skipDeceased = FALSE;
-    parent::preProcess();
-    $this->setContactIDs();
-    CRM_Contact_Form_Task_PDFLetterCommon::preProcess($this);
-  }
-
-  /**
-   * Set defaults
-   * (non-PHPdoc)
-   * @see CRM_Core_Form::setDefaultValues()
-   */
-  function setDefaultValues() {
-    return  CRM_Contact_Form_Task_PDFLetterCommon::setDefaultValues();
-  }
-
-  /**
-   * Build the form
-   *
-   * @access public
-   *
-   * @return void
-   */
-  public function buildQuickForm() {
-    //enable form element
-    $this->assign('suppressForm', FALSE);
-    CRM_Contact_Form_Task_PDFLetterCommon::buildQuickForm($this);
-  }
-}
+<div class="crm-submit-buttons">{include file="CRM/common/formButtons.tpl" location="bottom"}</div>
+</div>
