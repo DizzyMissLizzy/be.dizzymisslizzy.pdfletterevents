@@ -45,7 +45,9 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
     foreach ($participantIDs as $participantID) {
 
       $participant = $participants[$participantID];
-      //CRM_CORE_ERROR::debug('Participant', $participant, $log = true, $html = true);
+      $eventid = $participant['event_id'];
+      $event = CRM_Utils_EventToken::getEventTokenDetails($eventid);
+
       // get contact information
       $contactId = $participant['contact_id'];
       $params = array('contact_id' => $contactId);
@@ -62,7 +64,7 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
       );
 
       $tokenHtml = CRM_Utils_Token::replaceContactTokens($html_message, $contacts[$contactId], TRUE, $messageToken);
-      //$tokenHtml = CRM_Utils_Token::replaceEntityTokens('membership', $membership, $tokenHtml, $messageToken);
+      $tokenHtml = CRM_Utils_EventToken::replaceEntityTokens('event', $participant, $event, $tokenHtml, $messageToken);
       $tokenHtml = CRM_Utils_Token::replaceHookTokens($tokenHtml, $contacts[$contactId], $categories, TRUE);
       //$tokenHtml = CRM_Utils_Token::parseThroughSmarty($tokenHtml, $contacts[$contactId]);
 
