@@ -14,11 +14,11 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
    *
    * @return None
    */
-  static function postProcess(&$form, $membershipIDs, $skipOnHold, $skipDeceased, $contactIDs) {
+  static function postProcess(&$form, $participantIDs, $skipOnHold, $skipDeceased, $contactIDs) {
 
     list($formValues, $categories, $html_message, $messageToken, $returnProperties) = self::processMessageTemplate($form);
 
-    $html = self::generateHTML($membershipIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories);
+    $html = self::generateHTML($participantIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories);
     self::createActivities($form, $html_message, $contactIDs);
     //CRM_CORE_ERROR::debug('Html', $html, $log = true, $html = true);
 
@@ -39,13 +39,15 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
    * @param unknown_type $messageToken
    * @return unknown
    */
-  static function generateHTML($membershipIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories) {
-    $memberships = CRM_Utils_Token::getMembershipTokenDetails($membershipIDs);
+  static function generateHTML($participantIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories) {
+    $participants = CRM_Utils_EventToken::getParticipantTokenDetails($participantIDs);
 
-    foreach ($membershipIDs as $membershipID) {
-      $membership = $memberships[$membershipID];
+    foreach ($participantIDs as $participantID) {
+
+      $participant = $participants[$participantID];
+      //CRM_CORE_ERROR::debug('Participant', $participant, $log = true, $html = true);
       // get contact information
-      $contactId = $membership['contact_id'];
+      $contactId = $participant['contact_id'];
       $params = array('contact_id' => $contactId);
       //getTokenDetails is much like calling the api contact.get function - but - with some minor
       // special handlings. It preceeds the existance of the api
@@ -56,17 +58,18 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
         $skipDeceased,
         NULL,
         $messageToken,
-        'CRM_Contribution_Form_Task_PDFLetterCommon'
+        'CRM_Contact_Form_Task_PDFLetterCommon'
       );
 
       $tokenHtml = CRM_Utils_Token::replaceContactTokens($html_message, $contacts[$contactId], TRUE, $messageToken);
-      $tokenHtml = CRM_Utils_Token::replaceEntityTokens('membership', $membership, $tokenHtml, $messageToken);
+      //$tokenHtml = CRM_Utils_Token::replaceEntityTokens('membership', $membership, $tokenHtml, $messageToken);
       $tokenHtml = CRM_Utils_Token::replaceHookTokens($tokenHtml, $contacts[$contactId], $categories, TRUE);
-      $tokenHtml = CRM_Utils_Token::parseThroughSmarty($tokenHtml, $contacts[$contactId]);
+      //$tokenHtml = CRM_Utils_Token::parseThroughSmarty($tokenHtml, $contacts[$contactId]);
 
       $html[] = $tokenHtml;
 
     }
+
     return $html;
   }
 }
