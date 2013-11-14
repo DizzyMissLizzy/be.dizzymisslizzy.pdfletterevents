@@ -68,3 +68,21 @@ function pdfletterevents_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
 function pdfletterevents_civicrm_managed(&$entities) {
   return _pdfletterevents_civix_civicrm_managed($entities);
 }
+
+function pdfletterevents_civicrm_searchTasks( $objectName, &$tasks ) {
+ // static variable to prevent showing an action two times in the list
+  $var = &drupal_static(__FUNCTION__, FALSE);
+
+  if (!$var) {
+    if ($objectName == 'event') {
+      $tasks[] = array(
+        'title'  => 'PDFbrief opstellen',
+        'class'  => 'CRM_Event_Form_Task_PDF',
+        'result' => FALSE,
+      );
+    }
+    $var = TRUE;
+  }
+}
+
+
