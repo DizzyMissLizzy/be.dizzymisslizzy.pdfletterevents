@@ -23,11 +23,19 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 *}
-<div class="crm-form-block crm-block crm-contact-task-pdf-form-block">
-<h3>{ts}Event Letter (PDF){/ts}</h3>
-  <div class="messages status no-popup">{include file="CRM/Pdfletterevents/Form/Task.tpl"}</div>
+{ts 1=$totalSelectedParticipants}Number of selected participants: %1{/ts}
 
-{include file="CRM/Contact/Form/Task/PDFLetterCommon.tpl"}
-
-<div class="crm-submit-buttons">{include file="CRM/common/formButtons.tpl" location="bottom"}</div>
+{if $rows }
+<div class="form-item">
+<table width="30%">
+  <tr class="columnheader">
+    <th>{ts}Name{/ts}</th>
+  </tr>
+{foreach from=$rows item=row}
+<tr class="{cycle values="odd-row,even-row"}">
+<td>{$row.displayName}</td>
+</tr>
+{/foreach}
+</table>
 </div>
+{/if}
