@@ -22,7 +22,7 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
     self::createActivities($form, $html_message, $contactIDs);
     //CRM_CORE_ERROR::debug('Html', $html, $log = true, $html = true);
 
-    CRM_Utils_PDF_Utils::html2pdf($html, "CiviLetter.pdf", FALSE, $formValues);
+    //CRM_Utils_PDF_Utils::html2pdf($html, "CiviLetter.pdf", FALSE, $formValues);
 
     $form->postProcessHook();
 

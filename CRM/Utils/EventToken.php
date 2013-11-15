@@ -116,6 +116,21 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
         $value .= $phone['phone'] ."<br/>";
       }
        break;
+    case 'info_url':
+       $value = CIVICRM_UF_BASEURL . 'civicrm/event/info?reset=1&id=' . $participant['event_id'];
+       break;
+    case 'registration_url':
+       $value = CIVICRM_UF_BASEURL . 'civicrm/event/register?reset=1&id=' . $participant['event_id'];
+       break;
+    case 'fee_amount':
+       $priceSetId = CRM_Price_BAO_PriceSet::getFor('civicrm_event', $participant['event_id']);
+       $result = civicrm_api3('PriceFieldValue', 'get', array('price_field_id' => $priceSetId));
+       $config = CRM_Core_Config::singleton();
+       $currency = $config->defaultCurrency;
+       foreach($result['values'] as $pricefield) {
+        $value .= $pricefield['label'] . ": " . $pricefield['amount'] . " " . $currency . "<br>";
+       }
+       break;
      default:
        $value = "{$entity}.{$token}";
        break;
