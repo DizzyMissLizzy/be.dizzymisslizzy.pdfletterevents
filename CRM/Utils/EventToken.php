@@ -83,7 +83,8 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
     $entity = 'event';
     self::_buildEventTokens();
     //CRM_CORE_ERROR::debug('Participant', $participant, $log = true, $html = true);
-    //CRM_CORE_ERROR::debug('Event', $event, $log = true, $html = true);
+      $params = array('entity_id' => $participant['event_id'], 'entity_table' => 'civicrm_event');
+      $location = CRM_Core_BAO_Location::getValues($params, TRUE);
 
    switch ($token) {
      case 'event_id':
@@ -99,20 +100,22 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
      case 'end_date':
         $value = $event[$participant['event_id']][$token];
        break;
-     /*case 'location':
-       try{
-        $street = civicrm_api3('Address', 'getvalue', array('id' => $event[$participant['event_id']]['loc_block_id'], 'return' => 'street_address'));
-        $postcode = civicrm_api3('Address', 'getvalue', array('id' => $event[$participant['event_id']]['loc_block_id'], 'return' => 'postal_code'));
-        $city = civicrm_api3('Address', 'getvalue', array('id' => $event[$participant['event_id']]['loc_block_id'], 'return' => 'postal_code'));
-
-         $value = $street . ', ' . $postcode . ' ' . $city;
-       }
-       catch (CiviCRM_API3_Exception $e) {
-         // we can anticipate we will get an error if the minimum fee is set to 'NULL' because of the way the
-         // api handles NULL (4.4)
-         $value = 0;
-       }
-       break;*/
+     case 'location':
+   // CRM_CORE_ERROR::debug('Locatie', $location, $log = true, $html = true);
+      foreach($location['address'] as $address) {
+        $value = $address['display_text'];
+      }
+       break;
+     case 'contact_email':
+     foreach($location['email'] as $email) {
+        $value .= $email['email'] ."<br/>";
+      }
+      break;
+     case 'contact_phone' :
+     foreach($location['phone'] as $phone) {
+        $value .= $phone['phone'] ."<br/>";
+      }
+       break;
      default:
        $value = "{$entity}.{$token}";
        break;
