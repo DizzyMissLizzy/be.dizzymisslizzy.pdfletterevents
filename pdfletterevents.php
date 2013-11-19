@@ -76,7 +76,7 @@ function pdfletterevents_civicrm_searchTasks( $objectName, &$tasks ) {
   if (!$var) {
     if ($objectName == 'event') {
       $tasks[] = array(
-        'title'  => 'PDFbrief opstellen',
+        'title'  => 'PDF Letter for participants',
         'class'  => 'CRM_Pdfletterevents_Form_Task_PDF',
         'result' => FALSE,
       );

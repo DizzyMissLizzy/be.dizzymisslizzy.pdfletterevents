@@ -42,9 +42,6 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
       return $str;
     }
 
-    //CRM_CORE_ERROR::debug('Entity', $knownTokens, $log = true, $html = true);
-
-
     $fn = 'get' . ucFirst($entity) . 'tokenReplacement';
     //since we already know the tokens lets just use them & do str_replace which is faster & simpler than preg_replace
     foreach ($knownTokens[$entity] as $token) {
@@ -55,14 +52,7 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
     return $str;
   }
 
-  /**
-   * Get replacement strings for any membership tokens (only a small number of tokens are implemnted in the first instance
-   * - this is used by the pdfLetter task from membership search
-   * @param string $token
-   * @param array $membership an api result array for a single membership
-   * @param boolean $escapeSmarty
-   * @return string token replacement
-   */
+
   /**
    * store membership tokens on the static _tokens array
    */
@@ -79,10 +69,18 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
     }
   }
 
+    /**
+   * Get replacement strings for any membership tokens (only a small number of tokens are implemnted in the first instance
+   * - this is used by the pdfLetter task from membership search
+   * @param string $token
+   * @param array $membership an api result array for a single membership
+   * @param boolean $escapeSmarty
+   * @return string token replacement
+   */
+
   public static function getEventTokenReplacement($token, $participant, $event, $escapeSmarty = FALSE) {
     $entity = 'event';
     self::_buildEventTokens();
-    //CRM_CORE_ERROR::debug('Participant', $participant, $log = true, $html = true);
       $params = array('entity_id' => $participant['event_id'], 'entity_table' => 'civicrm_event');
       $location = CRM_Core_BAO_Location::getValues($params, TRUE);
 
@@ -101,7 +99,6 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
         $value = $event[$participant['event_id']][$token];
        break;
      case 'location':
-   // CRM_CORE_ERROR::debug('Locatie', $location, $log = true, $html = true);
       foreach($location['address'] as $address) {
         $value = $address['display_text'];
       }

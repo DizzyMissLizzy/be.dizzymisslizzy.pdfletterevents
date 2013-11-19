@@ -14,15 +14,14 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
    *
    * @return None
    */
-  static function postProcess(&$form, $participantIDs, $skipOnHold, $skipDeceased, $contactIDs) {
+  static function postProcessEvents(&$form, $participantIDs, $skipOnHold, $skipDeceased, $contactIDs) {
 
     list($formValues, $categories, $html_message, $messageToken, $returnProperties) = self::processMessageTemplate($form);
 
     $html = self::generateHTML($participantIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories);
     self::createActivities($form, $html_message, $contactIDs);
-    //CRM_CORE_ERROR::debug('Html', $html, $log = true, $html = true);
 
-    //CRM_Utils_PDF_Utils::html2pdf($html, "CiviLetter.pdf", FALSE, $formValues);
+    CRM_Utils_PDF_Utils::html2pdf($html, "CiviLetter.pdf", FALSE, $formValues);
 
     $form->postProcessHook();
 
@@ -60,13 +59,13 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
         $skipDeceased,
         NULL,
         $messageToken,
-        'CRM_Contact_Form_Task_PDFLetterCommon'
+        'CRM_Contribution_Form_Task_PDFLetterCommon'
       );
 
       $tokenHtml = CRM_Utils_Token::replaceContactTokens($html_message, $contacts[$contactId], TRUE, $messageToken);
       $tokenHtml = CRM_Utils_EventToken::replaceEntityEventTokens('event', $participant, $event, $tokenHtml, $messageToken);
       $tokenHtml = CRM_Utils_Token::replaceHookTokens($tokenHtml, $contacts[$contactId], $categories, TRUE);
-      //$tokenHtml = CRM_Utils_Token::parseThroughSmarty($tokenHtml, $contacts[$contactId]);
+      $tokenHtml = CRM_Utils_Token::parseThroughSmarty($tokenHtml, $contacts[$contactId]);
 
       $html[] = $tokenHtml;
 
