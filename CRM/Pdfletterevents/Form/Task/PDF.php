@@ -120,6 +120,22 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
    * @return Ambigous <NULL, multitype:string Ambigous <string, string> >
    */
   public function listTokens() {
-    return CRM_Core_SelectValues::eventTokens();
+
+
+    $eventtokens = CRM_Core_SelectValues::eventTokens();
+
+    $participanttokens = CRM_Core_SelectValues::participantTokens();
+    $tokens = $eventtokens + $participanttokens;
+
+     $customtokens = CRM_CORE_BAO_CustomField::getFields('Event');
+     //CRM_CORE_Error::debug('customtokens', $customtokens);
+    foreach ($customtokens as $tokenkey => $tokenvalue) {
+$tokens["{event.custom_$tokenkey}"] = $tokenvalue['label'] . '::' . $tokenvalue['groupTitle'];
+    }
+     //CRM_CORE_Error::debug('tokens', $tokens);
+    return $tokens;
+    //r//eturn CRM_Core_SelectValues::eventTokens();
   }
 }
+
+

@@ -1,8 +1,14 @@
 <?xml version="1.0"?>
 <extension key="be.dizzymisslizzy.pdfletterevents" type="module">
+<downloadUrl>https://github.com/DizzyMissLizzy/be.dizzymisslizzy.pdfletterevents/archive/master.zip</downloadUrl>
   <file>pdfletterevents</file>
   <name>PDF Letters events</name>
   <description>Make pdf letters for participants of events</description>
+<urls>
+    <url desc="Main Extension Page">http://civicrm.org</url>
+    <url desc="Support">http://forum.civicrm.org</url>
+    <url desc="Licensing">http://civicrm.org/licensing</url>
+  </urls>
   <license></license>
   <maintainer>
     <author>Lies Lamoen</author>
@@ -12,7 +18,8 @@
   <version>1.0</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>4.3, 4.4</ver>
+    <ver>4.3</ver>
+    <ver>4.4</ver>
   </compatibility>
   <comments></comments>
   <civix>
