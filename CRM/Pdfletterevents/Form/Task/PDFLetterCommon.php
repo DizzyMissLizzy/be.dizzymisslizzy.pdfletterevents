@@ -21,17 +21,17 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
     $html = self::generateHTML($participantIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories);
     self::createActivities($form, $html_message, $contactIDs);
 
+
     CRM_Utils_PDF_Utils::html2pdf($html, "CiviLetter.pdf", FALSE, $formValues);
 
     $form->postProcessHook();
 
     CRM_Utils_System::civiExit(1);
   }
-  //end of function
 
   /**
    * generate htmlfor pdf letters
-   * @param unknown_type $membershipIDs
+   * @param unknown_type $participantIDs
    * @param unknown_type $returnProperties
    * @param unknown_type $skipOnHold
    * @param unknown_type $skipDeceased
@@ -39,6 +39,7 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
    * @return unknown
    */
   static function generateHTML($participantIDs, $returnProperties, $skipOnHold, $skipDeceased, $messageToken, $html_message, $categories) {
+
     $participants = CRM_Utils_EventToken::getParticipantTokenDetails($participantIDs);
 
     foreach ($participantIDs as $participantID) {
@@ -50,8 +51,7 @@ class CRM_PdfLetterEvents_Form_Task_PDFLetterCommon extends CRM_Contact_Form_Tas
       // get contact information
       $contactId = $participant['contact_id'];
       $params = array('contact_id' => $contactId);
-      //getTokenDetails is much like calling the api contact.get function - but - with some minor
-      // special handlings. It preceeds the existance of the api
+
       list($contacts) = CRM_Utils_Token::getTokenDetails(
         $params,
         $returnProperties,

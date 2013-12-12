@@ -56,6 +56,7 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
    * @return void
    * @access public
    */
+
   function preProcess() {
     $this->skipOnHold = $this->skipDeceased = FALSE;
     parent::preProcess();
@@ -92,8 +93,8 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
    *
    * @return None
    */
+
   public function postProcess() {
-    // TODO: rewrite using contribution token and one letter by contribution
     $this->setContactIDs();
     $skipOnHold = isset($this->skipOnHold) ? $this->skipOnHold : FALSE;
     $skipDeceased = isset($this->skipDeceased) ? $this->skipDeceased : TRUE;
@@ -101,40 +102,23 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
   }
 
   /**
-   * list available tokens, at time of writing these were
-   * {event.event_id} => Event ID'
-   * {event.title} => Event Title
-   * {event.start_date} => Event Start Date
-   * {event.end_date} => Event End Date
-   * {event.event_type} => Event Type
-   * {event.summary} => Event Summary
-   * {event.description} => Event Description
-   * {event.contact_email} => Event Contact Email
-   * {event.contact_phone} => Event Contact Phone
-   * {event.location} => Event Location
-   * {event.description} => Event Description
-   * {event.location} => Event Location
-   * {event.fee_amount} => Event Fees
-   * {event.info_url} => Event Info URL
-   * {event.registration_url} => Event Registration URL
-   * @return Ambigous <NULL, multitype:string Ambigous <string, string> >
+   * list available tokens for event and participants and the tokens for the custom fields of event and participant
    */
-  public function listTokens() {
 
+  public function listTokens() {
 
     $eventtokens = CRM_Core_SelectValues::eventTokens();
 
     $participanttokens = CRM_Core_SelectValues::participantTokens();
     $tokens = $eventtokens + $participanttokens;
 
-     $customtokens = CRM_CORE_BAO_CustomField::getFields('Event');
-     //CRM_CORE_Error::debug('customtokens', $customtokens);
+    $customtokens = CRM_CORE_BAO_CustomField::getFields('Event');
+
     foreach ($customtokens as $tokenkey => $tokenvalue) {
-$tokens["{event.custom_$tokenkey}"] = $tokenvalue['label'] . '::' . $tokenvalue['groupTitle'];
+      $tokens["{event.custom_$tokenkey}"] = $tokenvalue['label'] . '::' . $tokenvalue['groupTitle'];
     }
-     //CRM_CORE_Error::debug('tokens', $tokens);
+
     return $tokens;
-    //r//eturn CRM_Core_SelectValues::eventTokens();
   }
 }
 

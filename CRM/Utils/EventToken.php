@@ -2,17 +2,15 @@
 
 class CRM_Utils_EventToken extends CRM_Utils_Token {
 
-
-/**
+  /**
    * Get Participant Token Details
    * @param array $participantIDs array of participant IDS
    */
   static function getParticipantTokenDetails($participantIDs) {
-
     foreach ($participantIDs as $participantid) {
-        $result = civicrm_api3('participant', 'get', array('participant_id' => $participantid));
-        $participants[$participantid] = $result['values'][$participantid];
-      }
+      $result = civicrm_api3('participant', 'get', array('participant_id' => $participantid));
+      $participants[$participantid] = $result['values'][$participantid];
+    }
     return $participants;
   }
 
@@ -22,8 +20,8 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
    */
   static function getEventTokenDetails($eventID) {
 
-  $event = civicrm_api3('event', 'get', array('id' => $eventID));
-  return $event['values'][$eventID];
+    $event = civicrm_api3('event', 'get', array('id' => $eventID));
+    return $event['values'][$eventID];
 
   }
 
@@ -75,8 +73,7 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
   }
 
     /**
-   * Get replacement strings for any event tokens (only a small number of tokens are implemnted in the first instance
-   * - this is used by the pdfLetter task from zvznt search
+   * Get replacement strings for any event tokens
    * @param string $token
    * @param array $event an api result array for a single event
    * @param boolean $escapeSmarty
@@ -86,58 +83,65 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
   public static function getEventTokenReplacement($token, $event, $escapeSmarty = FALSE) {
     $entity = 'event';
     self::_buildEventTokens();
-      $params = array('entity_id' => $event['id'], 'entity_table' => 'civicrm_event');
-      $location = CRM_Core_BAO_Location::getValues($params, TRUE);
 
-   switch ($token) {
-     case 'title' :
-       $value = $event['event_title'];
-       break;
-     case 'type':
-     $params = array(
-  'option_group_id' => 14,
-  'value' => $event['event_type_id'],
-  'return' => 'label',
-);
+    $params = array('entity_id' => $event['id'], 'entity_table' => 'civicrm_event');
+    $location = CRM_Core_BAO_Location::getValues($params, TRUE);
+
+    switch ($token) {
+      case 'title' :
+        $value = $event['event_title'];
+        break;
+      case 'end_date':
+      case 'start_date':
+        $end_date = $event[$token];
+        $value = CRM_Utils_Date::customFormat($end_date, "%d/%m/%Y");
+        break;
+      case 'type':
+        $params = array(
+          'option_group_id' => 14,
+          'value' => $event['event_type_id'],
+          'return' => 'label',
+        );
         $value = civicrm_api3('OptionValue', 'getvalue', $params);
-       break;
-     case 'location':
-      foreach($location['address'] as $address) {
-        $value = $address['display_text'];
-      }
-       break;
-     case 'contact_email':
-     foreach($location['email'] as $email) {
-        $value .= $email['email'] ."<br/>";
-      }
-      break;
-     case 'contact_phone' :
-     foreach($location['phone'] as $phone) {
-        $value .= $phone['phone'] ."<br/>";
-      }
-       break;
-    case 'info_url':
-       $value = CIVICRM_UF_BASEURL . 'civicrm/event/info?reset=1&id=' . $event['id'];
-       break;
-    case 'registration_url':
-       $value = CIVICRM_UF_BASEURL . 'civicrm/event/register?reset=1&id=' . $event['id'];
-       break;
-    case 'fee_amount':
-       $priceSetId = CRM_Price_BAO_PriceSet::getFor('civicrm_event', $event['id']);
-       $result = civicrm_api3('PriceFieldValue', 'get', array('price_field_id' => $priceSetId));
-       $config = CRM_Core_Config::singleton();
-       $currency = $config->defaultCurrency;
-       foreach($result['values'] as $pricefield) {
-        $value .= $pricefield['label'] . ": " . $pricefield['amount'] . " " . $currency . "<br>";
-       }
-       break;
-     default:
-     if (in_array($token, self::$_tokens[$entity])) {
+        break;
+      case 'location':
+        foreach($location['address'] as $address) {
+          $value = $address['display_text'];
+        }
+        break;
+      case 'contact_email':
+        foreach($location['email'] as $email) {
+          $value .= $email['email'] ."<br/>";
+        }
+        break;
+      case 'contact_phone' :
+        foreach($location['phone'] as $phone) {
+          $value .= $phone['phone'] ."<br/>";
+        }
+        break;
+      case 'info_url':
+        $value = CIVICRM_UF_BASEURL . 'civicrm/event/info?reset=1&id=' . $event['id'];
+        break;
+      case 'registration_url':
+        $value = CIVICRM_UF_BASEURL . 'civicrm/event/register?reset=1&id=' . $event['id'];
+        break;
+      case 'fee_amount':
+        $priceSetId = CRM_Price_BAO_PriceSet::getFor('civicrm_event', $event['id']);
+        $result = civicrm_api3('PriceFieldValue', 'get', array('price_field_id' => $priceSetId));
+        $config = CRM_Core_Config::singleton();
+        $currency = $config->defaultCurrency;
+          foreach($result['values'] as $pricefield) {
+            $value .= $pricefield['label'] . ": " . $pricefield['amount'] . " " . $currency . "<br>";
+          }
+        break;
+      default:
+        if (in_array($token, self::$_tokens[$entity])) {
          $value = $event[$token];
-       }
-       else {
-       $value = "{$entity}.{$token}";}
-       break;
+        }
+        else {
+          $value = "{$entity}.{$token}";
+        }
+        break;
     }
 
     if ($escapeSmarty) {
@@ -159,15 +163,14 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
         $participantTokens[] = substr($token, (strpos($token, '.') + 1), -1);
       }
 
-      self::$_tokens[$key] = $participantTokens;
+    self::$_tokens[$key] = $participantTokens;
     }
 
   }
 
 
     /**
-   * Get replacement strings for any participant tokens (only a small number of tokens are implemnted in the first instance
-   * - this is used by the pdfLetter task from participant search
+   * Get replacement strings for any participant tokens
    * @param string $token
    * @param array $participant an api result array for a single participant
    * @param boolean $escapeSmarty
@@ -177,21 +180,23 @@ class CRM_Utils_EventToken extends CRM_Utils_Token {
   public static function getParticipantTokenReplacement($token, $participant, $escapeSmarty = FALSE) {
     $entity = 'participant';
     self::_buildParticipantTokens();
+    $value;
 
-   switch ($token) {
-     case 'participant_fee_level':
-       $value =  $participant[$token][0];
-       break;
-     case 'participant_role':
+    switch ($token) {
+      case 'participant_fee_level':
+        $value =  $participant[$token][0];
+        break;
+      case 'participant_role':
         $value = CRM_Event_PseudoConstant::participantRole($participant['participant_role_id']);
-       break;
-       default:
-     if (in_array($token, self::$_tokens[$entity])) {
-         $value = $participant[$token];
-       }
-       else {
-       $value = "{$entity}.{$token}";}
-       break;
+        break;
+      default:
+        if (in_array($token, self::$_tokens[$entity])) {
+          $value = $participant[$token];
+        }
+        else {
+          $value = "{$entity}.{$token}";
+        }
+        break;
     }
 
     if ($escapeSmarty) {
