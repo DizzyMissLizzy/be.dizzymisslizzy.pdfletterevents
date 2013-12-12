@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<extension key="be.dizzymisslizzy.pdfletterevents" type="module">
-<downloadUrl>https://github.com/DizzyMissLizzy/be.dizzymisslizzy.pdfletterevents/archive/master.zip</downloadUrl>
+<extension key="be.mediaraven.pdfletterevents" type="module">
+<downloadUrl>https://github.com/DizzyMissLizzy/be.mediaraven.pdfletterevents/archive/master.zip</downloadUrl>
   <file>pdfletterevents</file>
   <name>PDF Letters events</name>
   <description>Make pdf letters for participants of events</description>
@@ -12,13 +12,12 @@
   <license></license>
   <maintainer>
     <author>Lies Lamoen</author>
-    <email>lieslamoen@gmail.com</email>
+    <email>lies.lamoen@mediaraven.be</email>
   </maintainer>
   <releaseDate>2013-11-14</releaseDate>
   <version>1.0</version>
   <develStage>stable</develStage>
   <compatibility>
-    <ver>4.3</ver>
     <ver>4.4</ver>
   </compatibility>
   <comments></comments>

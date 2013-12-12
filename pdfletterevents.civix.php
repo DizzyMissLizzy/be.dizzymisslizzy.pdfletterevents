@@ -151,7 +151,7 @@ function _pdfletterevents_civix_civicrm_managed(&$entities) {
     $es = include $file;
     foreach ($es as $e) {
       if (empty($e['module'])) {
-        $e['module'] = 'be.dizzymisslizzy.pdfletterevents';
+        $e['module'] = 'be.mediaraven.pdfletterevents';
       }
       $entities[] = $e;
     }
