@@ -70,18 +70,31 @@ function pdfletterevents_civicrm_managed(&$entities) {
 }
 
 function pdfletterevents_civicrm_searchTasks( $objectName, &$tasks ) {
- // static variable to prevent showing an action two times in the list
-  $var = &drupal_static(__FUNCTION__, FALSE);
 
-  if (!$var) {
     if ($objectName == 'event') {
-      $tasks[] = array(
-        'title'  => 'PDF Letter for participants',
-        'class'  => 'CRM_Pdfletterevents_Form_Task_PDF',
-        'result' => FALSE,
-      );
-    }
-    $var = TRUE;
+       $tmp_label  = 'PDF Letter for Participants'; 
+       foreach($tasks as $task){
+   	        	$tmp_cur_title = $task['title'];
+   			if(strcmp( $tmp_cur_title , $tmp_label) == 0 ){
+   				$task_found = true;
+   				// extra task already exists, do not add it again. 
+   			
+   			}
+   			 
+   		}
+   		
+    		
+   		 if( $task_found == false){
+   		 
+   		    $tasks[] = array(
+		        'title'  =>  $tmp_label  ,
+		        'class'  => 'CRM_Pdfletterevents_Form_Task_PDF',
+		        'result' => FALSE,
+		      );
+   		 
+   		 }
+    
+    
   }
 }
 
