@@ -71,6 +71,7 @@ function pdfletterevents_civicrm_managed(&$entities) {
 
 function pdfletterevents_civicrm_searchTasks( $objectName, &$tasks ) {
 
+    $task_found = false;
     if ($objectName == 'event') {
        $tmp_label  = 'PDF Letter for Participants'; 
        foreach($tasks as $task){
