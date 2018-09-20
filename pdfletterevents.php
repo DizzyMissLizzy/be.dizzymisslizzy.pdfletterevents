@@ -1,5 +1,7 @@
 <?php
 
+use Civi\Token\Event\TokenValueEvent;
+
 require_once 'pdfletterevents.civix.php';
 
 /**
@@ -7,6 +9,22 @@ require_once 'pdfletterevents.civix.php';
  */
 function pdfletterevents_civicrm_config(&$config) {
   _pdfletterevents_civix_civicrm_config($config);
+
+  // I copied this trick with Civi::$statics from the documentation:
+  // https://docs.civicrm.org/dev/en/latest/hooks/setup/symfony/
+  if (isset(Civi::$statics[__FUNCTION__])) { return; }
+  Civi::$statics[__FUNCTION__] = 1;
+
+  Civi::dispatcher()->addListener(
+    'civi.token.eval',
+    // [new CRM_Pdfletterevents_Tokens(), 'evaluateTokens']
+    function (TokenValueEvent $e) {
+      // I wonder whether I could inject this subscriber.
+      $subscriber = new CRM_Pdfletterevents_Tokens();
+      $subscriber->evaluateTokens($e);
+    }
+  );
+
 }
 
 /**
