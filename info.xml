@@ -14,11 +14,19 @@
     <author>Lies Lamoen</author>
     <email>lies.lamoen@mediaraven.be</email>
   </maintainer>
-  <releaseDate>2013-11-14</releaseDate>
-  <version>1.0</version>
-  <develStage>stable</develStage>
+  <releaseDate>2018-09-19</releaseDate>
+  <version>1.1</version>
+  <develStage>beta</develStage>
   <compatibility>
-    <ver>4.4</ver>
+    <!-- it will probably not work any more on 4.7 -->
+    <!-- just guessing: -->
+    <ver>5.0</ver>
+    <ver>5.1</ver>
+    <ver>5.2</ver>
+    <ver>5.3</ver>
+    <ver>5.4</ver>
+    <!-- this seems to work, but not extensively tested -->
+    <ver>5.5</ver>
   </compatibility>
   <comments></comments>
   <civix>
