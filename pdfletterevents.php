@@ -15,12 +15,12 @@ function pdfletterevents_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
 
+  $subscriber = new CRM_Pdfletterevents_Tokens();
+
   Civi::dispatcher()->addListener(
     'civi.token.eval',
     // [new CRM_Pdfletterevents_Tokens(), 'evaluateTokens']
-    function (TokenValueEvent $e) {
-      // I wonder whether I could inject this subscriber.
-      $subscriber = new CRM_Pdfletterevents_Tokens();
+    function (TokenValueEvent $e) use ($subscriber) {
       $subscriber->evaluateTokens($e);
     }
   );
