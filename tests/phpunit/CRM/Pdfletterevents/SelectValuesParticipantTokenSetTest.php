@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 use CRM_Pdfletterevents_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
@@ -6,7 +6,7 @@ use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
 
 /**
- * FIXME - Add test description.
+ * Test whether tokens and token names are properly returned.
  *
  * Tips:
  *  - With HookInterface, you may implement CiviCRM hooks directly in the test class.
@@ -19,7 +19,19 @@ use Civi\Test\TransactionalInterface;
  *
  * @group headless
  */
-class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+final class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+
+  /**
+   * @var int
+   */
+  private $customFieldId;
+
+  /**
+   * @var int
+   */
+  private $customGroupId;
+
+  const CUSTOM_GROUP_NAME = 'test_pdfletterevents_custom_group';
 
   public function setUpHeadless() {
     // Civi\Test has many helpers, like install(), uninstall(), sql(), and sqlFile().
@@ -31,6 +43,50 @@ class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends \PHPUnit_F
 
   public function setUp() {
     parent::setUp();
+
+    // Set up some custom field for participants.
+    // FIXME: This needs some cleanup.
+    try {
+      $result = civicrm_api3('CustomGroup', 'create', [
+        'name' => self::CUSTOM_GROUP_NAME,
+        'extends' => 'Participant',
+        'title' => 'Custom group for testing',
+        // Don't forget to specify a table name, otherwise you will get strange errors.
+        'table_name' => self::CUSTOM_GROUP_NAME,
+      ]);
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+      // Custom group probably already exists.
+      $result = civicrm_api3('CustomGroup', 'get', [
+        'name' => self::CUSTOM_GROUP_NAME,
+      ]);
+    }
+    $this->customGroupId = $result['id'];
+
+    try {
+      $result = civicrm_api3('CustomField', 'create', [
+        'custom_group_id' => $this->customGroupId,
+        'label' => 'My Field',
+        'data_type' => 'String',
+        'html_type' => 'Text',
+        'is_required' => 0,
+        'is_searchable' => 1,
+        'is_search_range' => 0,
+        'is_active' => 1,
+        'is_view' => 0,
+        'text_lenght' => 20,
+        'column_name' => 'my_field'
+      ]);
+    }
+    catch (CiviCRM_API3_Exception $ex) {
+      // Custom field probably already exists.
+      $result = civicrm_api3('CustomField', 'get', [
+        'custom_group_id' => $this->customGroupId,
+        'label' => 'My field',
+      ]);
+    }
+
+    $this->customFieldId = $result['id'];
   }
 
   public function tearDown() {
@@ -38,17 +94,14 @@ class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends \PHPUnit_F
   }
 
   /**
-   * Example: Test that a version is returned.
+   * @test
    */
-  public function testWellFormedVersion() {
-    $this->assertRegExp('/^([0-9\.]|alpha|beta)*$/', \CRM_Utils_System::version());
-  }
+  public function itShouldReturnTokenNames() {
+    $tokenSet = new CRM_Pdfletterevents_SelectValuesParticipantTokenSet();
+    $tokenNames = $tokenSet->getParticipantTokenNames();
 
-  /**
-   * Example: Test that we're using a fake CMS.
-   */
-  public function testWellFormedUF() {
-    $this->assertEquals('UnitTests', CIVICRM_UF);
+    $this->assertArrayHasKey('event_start_date', $tokenNames);
+    $this->assertArrayHasKey('event_end_date', $tokenNames);
+    $this->assertArrayHasKey("custom_{$this->customFieldId}", $tokenNames);
   }
-
 }

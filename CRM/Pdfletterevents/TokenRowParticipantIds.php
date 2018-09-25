@@ -5,8 +5,11 @@ use Civi\Token\TokenRow;
 
 final class CRM_Pdfletterevents_TokenRowParticipantIds implements CRM_Pdfletterevents_ParticipantIds
 {
+  /** @var int  */
   private $participantId;
+  /** @var int  */
   private $contactId;
+  /** @var int  */
   private $eventId;
 
   /**

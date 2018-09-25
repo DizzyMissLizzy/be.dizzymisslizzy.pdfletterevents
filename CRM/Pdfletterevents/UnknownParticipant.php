@@ -1,5 +1,5 @@
 <?php
 
-class CRM_Pdfletterevents_UnknownParticipant extends Exception
+final class CRM_Pdfletterevents_UnknownParticipant extends Exception
 {
 }
