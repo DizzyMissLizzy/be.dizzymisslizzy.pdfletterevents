@@ -15,7 +15,11 @@ function pdfletterevents_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
 
-  $subscriber = new CRM_Pdfletterevents_Tokens();
+  // Not sure if I can configure dependency injection, so that I can
+  // get the subscriber via the container.
+  $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
+    new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
+  );
 
   Civi::dispatcher()->addListener(
     'civi.token.eval',
