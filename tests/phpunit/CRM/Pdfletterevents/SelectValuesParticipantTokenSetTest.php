@@ -4,22 +4,17 @@ use CRM_Pdfletterevents_ExtensionUtil as E;
 use Civi\Test\HeadlessInterface;
 use Civi\Test\HookInterface;
 use Civi\Test\TransactionalInterface;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject;
 
 /**
  * Test whether tokens and token names are properly returned.
  *
- * Tips:
- *  - With HookInterface, you may implement CiviCRM hooks directly in the test class.
- *    Simply create corresponding functions (e.g. "hook_civicrm_post(...)" or similar).
- *  - With TransactionalInterface, any data changes made by setUp() or test****() functions will
- *    rollback automatically -- as long as you don't manipulate schema or truncate tables.
- *    If this test needs to manipulate schema or truncate tables, then either:
- *       a. Do all that using setupHeadless() and Civi\Test.
- *       b. Disable TransactionalInterface, and handle all setup/teardown yourself.
+ * You should use PHPUnit 5 to run this test.
  *
  * @group headless
  */
-final class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends \PHPUnit_Framework_TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+final class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   /**
    * @var int
