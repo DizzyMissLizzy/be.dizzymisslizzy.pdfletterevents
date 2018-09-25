@@ -15,16 +15,18 @@ function pdfletterevents_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
 
-  // Not sure if I can configure dependency injection, so that I can
-  // get the subscriber via the container.
-  $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
-    new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
-  );
-
   Civi::dispatcher()->addListener(
     'civi.token.eval',
-    // [new CRM_Pdfletterevents_Tokens(), 'evaluateTokens']
-    function (TokenValueEvent $e) use ($subscriber) {
+    function (TokenValueEvent $e) {
+      // Only create this subscriber when it is needed, because it uses
+      // a static class that caches the token values.
+      // See CRM_Core_SelectValues::participantTokens().
+      // If the subscriber is instantiated at the time hook_civicrm_config is
+      // called, the caching causes a unit test to fail :-(((
+      $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
+        new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
+      );
+
       $subscriber->evaluateTokens($e);
     }
   );

@@ -42,7 +42,7 @@ final class CRM_Pdfletterevents_TokenRowParticipantIds implements CRM_Pdflettere
 
     // Let's assume that a contact can only participate once to an event.
     try {
-      $result = civicrm_api3('participant', 'getSingle', [
+      $result = civicrm_api3('Participant', 'getsingle', [
         'contact_id' => $contactId,
         'event_id' => $eventId,
       ]);
