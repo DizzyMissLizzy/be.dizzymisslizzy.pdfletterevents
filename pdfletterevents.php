@@ -1,5 +1,7 @@
 <?php
 
+use Civi\Token\Event\TokenValueEvent;
+
 require_once 'pdfletterevents.civix.php';
 
 /**
@@ -7,6 +9,28 @@ require_once 'pdfletterevents.civix.php';
  */
 function pdfletterevents_civicrm_config(&$config) {
   _pdfletterevents_civix_civicrm_config($config);
+
+  // I copied this trick with Civi::$statics from the documentation:
+  // https://docs.civicrm.org/dev/en/latest/hooks/setup/symfony/
+  if (isset(Civi::$statics[__FUNCTION__])) { return; }
+  Civi::$statics[__FUNCTION__] = 1;
+
+  Civi::dispatcher()->addListener(
+    'civi.token.eval',
+    function (TokenValueEvent $e) {
+      // Only create this subscriber when it is needed, because it uses
+      // a static class that caches the token values.
+      // See CRM_Core_SelectValues::participantTokens().
+      // If the subscriber is instantiated at the time hook_civicrm_config is
+      // called, the caching causes a unit test to fail :-(((
+      $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
+        new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
+      );
+
+      $subscriber->evaluateTokens($e);
+    }
+  );
+
 }
 
 /**
