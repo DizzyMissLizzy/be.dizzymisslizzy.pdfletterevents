@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject;
  *
  * @group headless
  */
-final class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+final class CRM_Pdfletterevents_ParticipantTokenSetTest extends TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   /**
    * @var int
@@ -92,8 +92,8 @@ final class CRM_Pdfletterevents_SelectValuesParticipantTokenSetTest extends Test
    * @test
    */
   public function itShouldReturnTokenNames() {
-    $tokenSet = new CRM_Pdfletterevents_SelectValuesParticipantTokenSet();
-    $tokenNames = $tokenSet->getParticipantTokenNames();
+    $tokenSet = new CRM_Pdfletterevents_ParticipantTokenSet();
+    $tokenNames = $tokenSet->getTokenNames();
 
     $this->assertArrayHasKey('event_start_date', $tokenNames);
     $this->assertArrayHasKey('event_end_date', $tokenNames);

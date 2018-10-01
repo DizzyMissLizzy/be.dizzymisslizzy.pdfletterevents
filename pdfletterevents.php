@@ -24,7 +24,7 @@ function pdfletterevents_civicrm_config(&$config) {
       // If the subscriber is instantiated at the time hook_civicrm_config is
       // called, the caching causes a unit test to fail :-(((
       $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
-        new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
+        new CRM_Pdfletterevents_ParticipantTokenSet()
       );
 
       $subscriber->evaluateTokens($e);

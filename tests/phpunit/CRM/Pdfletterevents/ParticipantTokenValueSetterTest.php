@@ -5,9 +5,9 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject;
 
 /**
- * Test setting token values with @see CRM_Pdfletterevents_TokenRowParticipantTokenValueSetter.
+ * Test setting token values with @see CRM_Pdfletterevents_ParticipantTokenValueSetter.
  */
-final class CRM_Pdfletterevents_TokenRowParticipantTokenValueSetterTest extends TestCase {
+final class CRM_Pdfletterevents_ParticipantTokenValueSetterTest extends TestCase {
 
   /**
    * The setup() method is executed before the test is executed (optional).
@@ -34,7 +34,7 @@ final class CRM_Pdfletterevents_TokenRowParticipantTokenValueSetterTest extends 
       ->method('tokens')
       ->with('participant', 'token', 'value');
 
-    $valueSetter = new CRM_Pdfletterevents_TokenRowParticipantTokenValueSetter($tokenRowMock);
+    $valueSetter = new CRM_Pdfletterevents_ParticipantTokenValueSetter($tokenRowMock);
     $valueSetter->setValue('token', 'value');
   }
 

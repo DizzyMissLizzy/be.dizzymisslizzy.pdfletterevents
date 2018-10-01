@@ -15,7 +15,7 @@ use PHPUnit\Framework\MockObject;
  *
  * @group headless
  */
-final class CRM_Pdfletterevents_TokenRowParticipantIdsTest extends TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
+final class CRM_Pdfletterevents_ParticipantIdTest extends TestCase implements HeadlessInterface, HookInterface, TransactionalInterface {
 
   /** @var int */
   private $eventId;
@@ -75,10 +75,8 @@ final class CRM_Pdfletterevents_TokenRowParticipantIdsTest extends TestCase impl
       'actionSearchResult' => $stub
     ];
 
-    $ids = CRM_Pdfletterevents_TokenRowParticipantIds::fromTokenRow($tokenRowMock);
+    $ids = CRM_Pdfletterevents_ParticipantId::fromTokenRow($tokenRowMock);
 
-    $this->assertEquals($this->eventId, $ids->getEventId());
-    $this->assertEquals($this->contactId, $ids->getContactId());
-    $this->assertEquals($this->participantId, $ids->getParticipantId());
+    $this->assertEquals($this->participantId, $ids->getValue());
   }
 }
