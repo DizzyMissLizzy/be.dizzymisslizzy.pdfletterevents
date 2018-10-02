@@ -15,27 +15,11 @@
  * I ended up with these ugly long class names, because the PSR-4 namespaces didn't seem to work for me.
  * see https://civicrm.stackexchange.com/questions/16418/class-naming-and-namespaces-best-practice-as-an-extension-author#16436
  */
-final class CRM_Pdfletterevents_ParticipantTokenSet implements CRM_Pdfletterevents_TokenSet
+final class CRM_Pdfletterevents_ParticipantTokenSet extends CRM_Pdfletterevents_AbstractTokenSet
 {
   /** @inheritdoc */
   public function getTokens()
   {
     return CRM_Core_SelectValues::participantTokens();
-  }
-
-  /** @inheritdoc */
-  public function getTokenNames()
-  {
-    // There is probably an easier way to do this.
-
-    $result = [];
-
-    $pattern = '/\{participant\.([^.]*)\}/';
-    foreach ($this->getTokens() as $token => $description) {
-      $tokenName = preg_replace($pattern, '$1', $token);
-      $result[$tokenName] = $description;
-    }
-
-    return $result;
   }
 }
