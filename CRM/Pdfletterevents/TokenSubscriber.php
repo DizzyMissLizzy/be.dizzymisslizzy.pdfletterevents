@@ -33,7 +33,7 @@ interface CRM_Pdfletterevents_TokenSubscriber
    * This is the hard thing to implement, because @see TokenRow has little structure.
    *
    * @param TokenRow $row
-   * @return CRM_Pdfletterevents_ParticipantId
+   * @return CRM_Pdfletterevents_EntityId
    * @throws CRM_Pdfletterevents_EntityNotFound
    */
   public function getEntityId(TokenRow $row);

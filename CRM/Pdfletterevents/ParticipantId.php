@@ -14,7 +14,6 @@ final class CRM_Pdfletterevents_ParticipantId implements CRM_Pdfletterevents_Ent
   private $participantId;
 
   /**
-   * CRM_Pdfletterevents_TokenRowParticipantRowData constructor.
    * @param int $participantId
    */
   private function __construct($participantId)

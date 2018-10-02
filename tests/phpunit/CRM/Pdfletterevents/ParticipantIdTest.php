@@ -63,7 +63,7 @@ final class CRM_Pdfletterevents_ParticipantIdTest extends TestCase implements He
     parent::tearDown();
   }
 
-  public function testfromTokenRow() {
+  public function testFromTokenRow() {
     // mimic the structure of the CiviCRM TokenRow.
     $stub = new stdClass();
     $stub->contact_id = $this->contactId;
@@ -75,8 +75,8 @@ final class CRM_Pdfletterevents_ParticipantIdTest extends TestCase implements He
       'actionSearchResult' => $stub
     ];
 
-    $ids = CRM_Pdfletterevents_ParticipantId::fromTokenRow($tokenRowMock);
+    $id = CRM_Pdfletterevents_ParticipantId::fromTokenRow($tokenRowMock);
 
-    $this->assertEquals($this->participantId, $ids->getValue());
+    $this->assertEquals($this->participantId, $id->getValue());
   }
 }

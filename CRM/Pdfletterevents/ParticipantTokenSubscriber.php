@@ -15,7 +15,7 @@ final class CRM_Pdfletterevents_ParticipantTokenSubscriber extends CRM_Pdfletter
    */
   private $tokenSet;
 
-  public function __construct(CRM_Pdfletterevents_TokenSet $tokenSet)
+  public function __construct(CRM_Pdfletterevents_ParticipantTokenSet $tokenSet)
   {
     $this->tokenSet = $tokenSet;
     parent::__construct(
