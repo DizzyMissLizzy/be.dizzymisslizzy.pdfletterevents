@@ -16,22 +16,15 @@ function pdfletterevents_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
 
-  $subscribers = [
-    new CRM_Pdfletterevents_ParticipantTokenSubscriber(
-      new CRM_Pdfletterevents_ParticipantTokenSet()
-    ),
-    new CRM_Pdfletterevents_EventTokenSubscriber(
-      new CRM_Pdfletterevents_EventTokenSet()
-    ),
-  ];
+  $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
+    new CRM_Pdfletterevents_ParticipantTokenSet()
+  );
 
   // TODO: find a way to test this.
   Civi::dispatcher()->addListener(
     'civi.token.eval',
-    function (TokenValueEvent $e) use ($subscribers) {
-      array_walk($subscribers, function (AbstractTokenSubscriber $subscriber) use ($e) {
-        $subscriber->evaluateTokens($e);
-      });
+    function (TokenValueEvent $e) use ($subscriber) {
+      $subscriber->evaluateTokens($e);
     }
   );
 }

@@ -53,9 +53,6 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
   /** @var CRM_Pdfletterevents_ParticipantTokenSet */
   private $participantTokenSet;
 
-  /** @var CRM_Pdfletterevents_EventTokenSet */
-  private $eventTokenSet;
-
   /**
    * build all the data structures needed to build the form
    *
@@ -69,9 +66,7 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
     $this->setContactIDs();
     CRM_Contact_Form_Task_PDFLetterCommon::preProcess($this);
 
-    // Dependency injection would be nice.
     $this->participantTokenSet = new CRM_Pdfletterevents_ParticipantTokenSet();
-    $this->eventTokenSet = new CRM_Pdfletterevents_EventTokenSet();
   }
 
   /**
@@ -117,10 +112,16 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
 
   public function listTokens() {
 
-    $eventTokens = $this->eventTokenSet->getTokens();
+    $eventtokens = CRM_Core_SelectValues::eventTokens();
 
     $participantTokens = $this->participantTokenSet->getTokens();
-    $tokens = $eventTokens + $participantTokens;
+    $tokens = $eventtokens + $participantTokens;
+
+    $customtokens = CRM_CORE_BAO_CustomField::getFields('Event');
+
+    foreach ($customtokens as $tokenkey => $tokenvalue) {
+      $tokens["{event.custom_$tokenkey}"] = $tokenvalue['label'] . '::' . $tokenvalue['groupTitle'];
+    }
 
     return $tokens;
   }
