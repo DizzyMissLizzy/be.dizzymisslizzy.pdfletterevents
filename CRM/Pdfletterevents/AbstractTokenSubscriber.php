@@ -29,7 +29,7 @@ abstract class CRM_Pdfletterevents_AbstractTokenSubscriber extends AbstractToken
     try {
       $entityId = $this->getEntityId($row);
     } catch (CRM_Pdfletterevents_EntityNotFound $ex) {
-      // Let's ignore the token if the participant was not found.
+      // Let's ignore the token if the entity was not found.
       return;
     }
 
