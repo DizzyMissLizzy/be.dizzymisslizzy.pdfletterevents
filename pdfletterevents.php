@@ -1,5 +1,6 @@
 <?php
 
+use Civi\Token\AbstractTokenSubscriber;
 use Civi\Token\Event\TokenValueEvent;
 
 require_once 'pdfletterevents.civix.php';
@@ -15,22 +16,17 @@ function pdfletterevents_civicrm_config(&$config) {
   if (isset(Civi::$statics[__FUNCTION__])) { return; }
   Civi::$statics[__FUNCTION__] = 1;
 
+  $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
+    new CRM_Pdfletterevents_ParticipantTokenSet()
+  );
+
+  // TODO: find a way to test this.
   Civi::dispatcher()->addListener(
     'civi.token.eval',
-    function (TokenValueEvent $e) {
-      // Only create this subscriber when it is needed, because it uses
-      // a static class that caches the token values.
-      // See CRM_Core_SelectValues::participantTokens().
-      // If the subscriber is instantiated at the time hook_civicrm_config is
-      // called, the caching causes a unit test to fail :-(((
-      $subscriber = new CRM_Pdfletterevents_ParticipantTokenSubscriber(
-        new CRM_Pdfletterevents_SelectValuesParticipantTokenSet()
-      );
-
+    function (TokenValueEvent $e) use ($subscriber) {
       $subscriber->evaluateTokens($e);
     }
   );
-
 }
 
 /**

@@ -50,6 +50,9 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
 
   public $_cid = NULL;
 
+  /** @var CRM_Pdfletterevents_ParticipantTokenSet */
+  private $participantTokenSet;
+
   /**
    * build all the data structures needed to build the form
    *
@@ -62,6 +65,8 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
     parent::preProcess();
     $this->setContactIDs();
     CRM_Contact_Form_Task_PDFLetterCommon::preProcess($this);
+
+    $this->participantTokenSet = new CRM_Pdfletterevents_ParticipantTokenSet();
   }
 
   /**
@@ -109,8 +114,8 @@ class CRM_Pdfletterevents_Form_Task_PDF extends CRM_Event_Form_Task {
 
     $eventtokens = CRM_Core_SelectValues::eventTokens();
 
-    $participanttokens = CRM_Core_SelectValues::participantTokens();
-    $tokens = $eventtokens + $participanttokens;
+    $participantTokens = $this->participantTokenSet->getTokens();
+    $tokens = $eventtokens + $participantTokens;
 
     $customtokens = CRM_CORE_BAO_CustomField::getFields('Event');
 

@@ -1,28 +1,24 @@
 <?php
 
+/*
+ * Copyright (C) 2018 Johan Vervloet
+ * Licensed under Apache License, Version 2
+ * https://www.apache.org/licenses/LICENSE-2.0.html
+ */
 
 use Civi\Token\TokenRow;
 
-final class CRM_Pdfletterevents_TokenRowParticipantIds implements CRM_Pdfletterevents_ParticipantIds
+final class CRM_Pdfletterevents_ParticipantId implements CRM_Pdfletterevents_EntityId
 {
   /** @var int  */
   private $participantId;
-  /** @var int  */
-  private $contactId;
-  /** @var int  */
-  private $eventId;
 
   /**
-   * CRM_Pdfletterevents_TokenRowParticipantRowData constructor.
    * @param int $participantId
-   * @param int $contactId
-   * @param int $eventId
    */
-  private function __construct($participantId, $contactId, $eventId)
+  private function __construct($participantId)
   {
     $this->participantId = $participantId;
-    $this->contactId = $contactId;
-    $this->eventId = $eventId;
   }
 
   /**
@@ -32,7 +28,7 @@ final class CRM_Pdfletterevents_TokenRowParticipantIds implements CRM_Pdflettere
    *
    * @param TokenRow $tokenRow
    * @return self
-   * @throws CRM_Pdfletterevents_UnknownParticipant
+   * @throws CRM_Pdfletterevents_EntityNotFound
    */
   public static function fromTokenRow(TokenRow $tokenRow)
   {
@@ -48,37 +44,21 @@ final class CRM_Pdfletterevents_TokenRowParticipantIds implements CRM_Pdflettere
       ]);
     }
     catch (CiviCRM_API3_Exception $ex) {
-      throw new CRM_Pdfletterevents_UnknownParticipant(
+      throw new CRM_Pdfletterevents_EntityNotFound(
         'Unknown participant',
         0,
         $ex
       );
     }
 
-    return new self($result['id'], $contactId, $eventId);
+    return new self($result['id']);
   }
 
   /**
    * @return int
    */
-  public function getParticipantId()
+  public function getValue()
   {
     return $this->participantId;
-  }
-
-  /**
-   * @return int
-   */
-  public function getContactId()
-  {
-    return $this->contactId;
-  }
-
-  /**
-   * @return int
-   */
-  public function getEventId()
-  {
-    return $this->eventId;
   }
 }
